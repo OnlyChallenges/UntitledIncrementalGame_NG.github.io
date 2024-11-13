@@ -11,7 +11,7 @@ let game = {
     variables: {
         shapesPerClick: 1,
         ticksPerClick: 1,
-        efficiency: 1,
+        efficiency: 0,
     },
     shop: {
         costs: [10, 100, 2_500, 100_000, 25_000_000, 1_000_000_000],
