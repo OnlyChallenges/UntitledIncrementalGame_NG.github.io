@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Incremental Game</title>
+    <style>
+        body {background-color: #d9fff8}
+        .main-button {
+            border: none;
+            color: white;
+            background-color: #a9fff0;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-family: monospace;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+        }
+        .main-button:hover {
+            background-color: cadetblue;
+            color: #7ac9cc;
+        }
+        .other-button {
+            border: none;
+            color: white;
+            background-color: dodgerblue;
+            padding: 10px 27px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-family: monospace;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+        }
+        .other-button:hover {
+            background-color: #004a8e;
+            color: #7ac9cc;
+        }
+
+        .main-text-mono {
+            font-family: monospace;
+            color: darkcyan;
+        }
+    </style>
+</head>
+<body>
+<p id="shapes-text" class="main-text-mono">Shapes: 0</p>
+<button onclick="increaseShapes()" class="main-button">Generate Shapes</button>
+<p></p>
+<button onclick="buyShopItem(0)" class="other-button">Increase shapes per click by 1</button>
+<p id="shop-0-cost" class="main-text-mono">Cost: 10 shapes</p>
+<button onclick="buyShopItem(1)" class="other-button">Increase efficiency by 1</button>
+<p id="shop-1-cost" class="main-text-mono">Cost: 100 shapes</p>
+
+<button onclick="toggleStats()" class="other-button">Statistics</button>
+<p id="stats-text" class="main-text-mono"></p>
+<button onclick="toggleHelp()" class="other-button">Help</button>
+<p id="help-text" class="main-text-mono"></p>
+<script src="init.js"></script>
+</body>
+</html>
