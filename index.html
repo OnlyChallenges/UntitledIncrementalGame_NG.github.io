@@ -6,11 +6,8 @@
     <link rel="icon" type="image/x-icon" href="favicon.png">
     <style>
         body {background-color: #d9fff8}
-        .main-button {
+        .button {
             border: none;
-            color: white;
-            background-color: #a9fff0;
-            padding: 15px 32px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
@@ -19,46 +16,41 @@
             margin: 4px 2px;
             cursor: pointer;
             transition-duration: 0.4s;
+            color: white;
         }
+        .main-button {
+            background-color: #a9fff0;
+            padding: 15px 32px;
+        }
+
+        .other-button {
+            background-color: dodgerblue;
+            padding: 10px 27px;
+        }
+        .shiny-button {
+            background-color: #919100;
+            padding: 10px 27px;
+        }
+        .danger-button {
+            background-color: #880000;
+            padding: 10px 27px;
+        }
+
         .main-button:hover {
             background-color: cadetblue;
             color: #7ac9cc;
-        }
-        .other-button {
-            border: none;
-            color: white;
-            background-color: dodgerblue;
-            padding: 10px 27px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-family: monospace;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            transition-duration: 0.4s;
         }
         .other-button:hover {
             background-color: #004a8e;
             color: #7ac9cc;
         }
-        .shiny-button {
-            border: none;
-            color: white;
-            background-color: #919100;
-            padding: 10px 27px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-family: monospace;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            transition-duration: 0.4s;
-        }
         .shiny-button:hover {
             background-color: #454500;
             color: #ffff91;
+        }
+        .danger-button:hover {
+            background-color: #6a0000;
+            color: #ff7575;
         }
 
         .main-text-mono {
@@ -69,18 +61,21 @@
 </head>
 <body>
 <p id="shapes-text" class="main-text-mono">Shapes: 0</p>
-<button onclick="increaseShapes()" class="main-button">Generate Shapes</button>
+<button onclick="increaseShapes()" class="button main-button" id="main-button">Generate Shapes</button>
 <p></p>
-<button onclick="buyShopItem(0)" class="other-button">Increase shapes per click by 1</button>
+<button onclick="buyShopItem(0)" class="button other-button">Increase shapes per click by 1</button>
 <p id="shop-0-cost" class="main-text-mono">Cost: 10 shapes</p>
-<button onclick="buyShopItem(1)" class="other-button">Increase efficiency by 1</button>
+<button onclick="buyShopItem(1)" class="button other-button">Increase efficiency by 1</button>
 <p id="shop-1-cost" class="main-text-mono">Cost: 100 shapes</p>
-<button onclick="prestige()" class="shiny-button">Prestige</button>
+<button onclick="buyShopItem(2)" class="button other-button">Increase ticks per click by 2</button>
+<p id="shop-2-cost" class="main-text-mono">Cost: 1500 shapes</p>
+<button onclick="prestige()" class="button shiny-button" id="prestige-button">Prestige (requires 10000 shapes)</button>
 <p></p>
-<button onclick="toggleStats()" class="other-button">Statistics</button>
-<button onclick="toggleHelp()" class="other-button">Help</button>
+<button onclick="toggleStats()" class="button other-button">Statistics</button>
+<button onclick="toggleHelp()" class="button other-button">Help</button>
 <p id="stats-text" class="main-text-mono"></p>
 <p id="help-text" class="main-text-mono"></p>
+<button onclick="hardReset()" class="button danger-button">Hard Reset</button>
 <script src="init.js"></script>
 </body>
 </html>
