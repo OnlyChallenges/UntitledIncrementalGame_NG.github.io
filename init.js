@@ -20,7 +20,7 @@ let game = {
 }
 
 function increaseShapes () {
-    const increment = game.variables.shapesPerClick * game.variables.ticksPerClick * Math.floor(1 + game.variables.efficiency / 10);
+    const increment = game.variables.shapesPerClick * game.variables.ticksPerClick * Math.round(1 + game.variables.efficiency / 10);
     game.resources.shapes += increment
     game.stats.totalClicks++;
     game.stats.totalShapes += increment;
