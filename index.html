@@ -41,6 +41,24 @@
             background-color: #004a8e;
             color: #7ac9cc;
         }
+        .shiny-button {
+            border: none;
+            color: white;
+            background-color: #919100;
+            padding: 10px 27px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-family: monospace;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+        }
+        .shiny-button:hover {
+            background-color: #454500;
+            color: #ffff91;
+        }
 
         .main-text-mono {
             font-family: monospace;
@@ -56,10 +74,11 @@
 <p id="shop-0-cost" class="main-text-mono">Cost: 10 shapes</p>
 <button onclick="buyShopItem(1)" class="other-button">Increase efficiency by 1</button>
 <p id="shop-1-cost" class="main-text-mono">Cost: 100 shapes</p>
-
+<button onclick="prestige()" class="shiny-button">Prestige</button>
+<p></p>
 <button onclick="toggleStats()" class="other-button">Statistics</button>
-<p id="stats-text" class="main-text-mono"></p>
 <button onclick="toggleHelp()" class="other-button">Help</button>
+<p id="stats-text" class="main-text-mono"></p>
 <p id="help-text" class="main-text-mono"></p>
 <script src="init.js"></script>
 </body>
