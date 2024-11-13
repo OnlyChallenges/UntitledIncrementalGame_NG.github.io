@@ -7,25 +7,31 @@ let game = {
     },
     resources: {
         shapes: 0,
+        gildedShapes: 0,
     },
     variables: {
         shapesPerClick: 1,
         ticksPerClick: 1,
         efficiency: 0,
     },
+    prestige: {
+        prestigeMin: 10_000,
+        prestigeIncrement: 100,
+    },
     shop: {
         costs: [10, 100, 2_500, 100_000, 25_000_000, 1_000_000_000],
+        isExpensiveCost: [false, true, undefined, undefined, undefined, undefined],
         costIncrease: 2,
+        costIncreaseExpensive: 3,
     }
 }
 
 function increaseShapes () {
-    const increment = Math.round(game.variables.shapesPerClick * game.variables.ticksPerClick * (1 + game.variables.efficiency / 10));
+    const increment = Math.round(game.variables.shapesPerClick * game.variables.ticksPerClick * (1 + game.variables.efficiency));
     game.resources.shapes += increment
     game.stats.totalClicks++;
     game.stats.totalShapes += increment;
     updateShapeText();
-    return increment;
 }
 
 function updateShapeText() {
@@ -35,7 +41,8 @@ function updateShapeText() {
 function buyShopItem(item) {
     if (game.resources.shapes < game.shop.costs[item]) return;
     game.resources.shapes -= game.shop.costs[item];
-    game.shop.costs[item] *= game.shop.costIncrease;
+    if (!(game.shop.isExpensiveCost[item] ?? false)) game.shop.costs[item] *= game.shop.costIncrease
+    else game.shop.costs[item] *= game.shop.costIncreaseExpensive
     document.getElementById(`shop-${item}-cost`).innerHTML = `Cost: ${game.shop.costs[item]} shapes`;
     switch (item) {
         case 0:
@@ -45,6 +52,21 @@ function buyShopItem(item) {
             game.variables.efficiency++;
             break;
     }
+    updateShapeText();
+}
+
+function prestige() {
+    if (game.resources.shapes < game.prestige.prestigeMin) {
+        alert(`You need at least ${game.prestige.prestigeMin} shapes to prestige.`)
+        return;
+    }
+    if (!(confirm("Are you sure you want to prestige?"))) return;
+    game.resources.gildedShapes += +((Math.log10(game.resources.shapes) - 4).toFixed(2));
+    game.resources.shapes = 0;
+    game.variables.efficiency = 0;
+    game.variables.shapesPerClick = 1;
+    game.variables.ticksPerClick = 1;
+    game.shop.costs = [10, 100, 2_500, 100_000, 25_000_000, 1_000_000_000];
     updateShapeText();
 }
 
@@ -71,9 +93,42 @@ function toggleHelp() {
         Once you have 10 shapes, you can increase the amount of shapes per click by 1.<br>
         This will remove 10 shapes, and the cost of buying it again will double.<br><br>
         
-        Efficiency increases your shape gain by 0.1 for each point of efficiency you have.<br>
+        Efficiency increases your shape gain by 1 for each point you have.<br>
         Ticks increase your shape gain by increasing the amount of times that your shapes are calculated per click.
         `
     }
     game.stats.helpOpen = !game.stats.helpOpen;
+}
+
+function hardReset() {
+    if (!(confirm("Are you sure you want to hard reset?"))) return;
+    if (!(confirm("This will erase EVERYTHING! Are you really sure?"))) return;
+    game = {
+        stats: {
+            totalClicks: 0,
+            totalShapes: 0,
+            statsOpen: false,
+            helpOpen: false,
+        },
+        resources: {
+            shapes: 0,
+            gildedShapes: 0,
+        },
+        variables: {
+            shapesPerClick: 1,
+            ticksPerClick: 1,
+            efficiency: 0,
+        },
+        prestige: {
+            prestigeMin: 10_000,
+            prestigeIncrement: 100,
+        },
+        shop: {
+            costs: [10, 100, 2_500, 100_000, 25_000_000, 1_000_000_000],
+            isExpensiveCost: [false, true, undefined, undefined, undefined, undefined],
+            costIncrease: 2,
+            costIncreaseExpensive: 3,
+        }
+    }
+    alert("Reset your game!");
 }
