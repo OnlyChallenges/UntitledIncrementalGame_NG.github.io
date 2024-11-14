@@ -1,0 +1,52 @@
+body {background-color: #1b1e23}
+.button {
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: monospace;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition-duration: 0.4s;
+    color: white;
+}
+.main-button {
+    background-color: #a9fff0;
+    padding: 15px 32px;
+}
+
+.other-button {
+    background-color: dodgerblue;
+    padding: 10px 27px;
+}
+.shiny-button {
+    background-color: #919100;
+    padding: 10px 27px;
+}
+.danger-button {
+    background-color: #880000;
+    padding: 10px 27px;
+}
+
+.main-button:hover {
+    background-color: cadetblue;
+    color: #7ac9cc;
+}
+.other-button:hover {
+    background-color: #004a8e;
+    color: #7ac9cc;
+}
+.shiny-button:hover {
+    background-color: #454500;
+    color: #ffff91;
+}
+.danger-button:hover {
+    background-color: #6a0000;
+    color: #ff7575;
+}
+
+.main-text-mono {
+    font-family: monospace;
+    color: #c0f4f4;
+}
