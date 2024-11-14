@@ -29,6 +29,14 @@ const gameReset = Object.assign({}, game);
 
 function increaseShapes () {
     let increment = Math.round(game.variables.shapesPerClick * game.variables.ticksPerClick * (1 + game.variables.efficiency));
+    if game.stats.statsOpen {
+        document.getElementById("stats-text").innerHTML = `
+        Total Clicks: ${game.stats.totalClicks}<br>
+        Total Shapes: ${game.stats.totalShapes}<br>
+        Shapes per Click: ${game.variables.shapesPerClick}<br>
+        Ticks per Click: ${game.variables.ticksPerClick}<br>
+        Efficiency: ${game.variables.efficiency}`
+    }
     increment += (game.resources.gildedShapes * game.variables.shapesPerClick);
     game.resources.shapes += increment
     game.stats.totalClicks++;
