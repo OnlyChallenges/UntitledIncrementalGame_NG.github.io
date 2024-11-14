@@ -29,7 +29,7 @@ const gameReset = Object.assign({}, game);
 
 function increaseShapes () {
     let increment = Math.round(game.variables.shapesPerClick * game.variables.ticksPerClick * (1 + game.variables.efficiency));
-    if game.stats.statsOpen {
+    if (game.stats.statsOpen) {
         document.getElementById("stats-text").innerHTML = `
         Total Clicks: ${game.stats.totalClicks}<br>
         Total Shapes: ${game.stats.totalShapes}<br>
