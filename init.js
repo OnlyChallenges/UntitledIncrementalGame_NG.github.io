@@ -113,6 +113,13 @@ function prestige() {
     game.prestige.prestigeMin *= game.prestige.prestigeIncrement;
     game.shop.costs = [10, 100, 2_500, 100_000, 25_000_000, 1_000_000_000];
 
+    let costText;
+    for (let item of game.shop.costs) {
+        costText = document.getElementById(`shop-${item}-cost`)?.innerHTML
+        if (typeof costText === "undefined") continue;
+        costText = `Cost: ${game.shop.costs[item]} shapes`;
+    }
+
     document.getElementById("prestige-button").innerHTML = `Prestige (requires ${game.prestige.prestigeMin} shapes)`;
     updateShapeText();
 }
