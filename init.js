@@ -103,8 +103,8 @@ function prestige() {
     }
     if (!(confirm("Are you sure you want to prestige?"))) return;
 
-    game.resources.gildedShapes += +((Math.log10(game.resources.shapes) - 4).toFixed(2));
-    game.stats.totalGildedShapes += +((Math.log10(game.resources.shapes) - 4).toFixed(2)); // Sorry.
+    game.resources.gildedShapes += +((Math.log10(game.resources.shapes) - 3).toFixed(2));
+    game.stats.totalGildedShapes += +((Math.log10(game.resources.shapes) - 3).toFixed(2)); // Sorry.
 
     game.resources.shapes = 0;
     game.variables.efficiency = 0;
