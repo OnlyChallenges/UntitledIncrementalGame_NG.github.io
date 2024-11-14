@@ -28,6 +28,10 @@ body {background-color: #1b1e23}
     background-color: #880000;
     padding: 10px 27px;
 }
+.altar-button {
+    background-color: #6c00b8;
+    padding: 10px 27px;
+}
 
 .main-button:hover {
     background-color: cadetblue;
@@ -44,6 +48,10 @@ body {background-color: #1b1e23}
 .danger-button:hover {
     background-color: #6a0000;
     color: #ff7575;
+}
+.altar-button:hover {
+    background-color: #46007a;
+    color: #c691ff;
 }
 
 .main-text-mono {
