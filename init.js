@@ -44,7 +44,7 @@ function updateAllText() {
     updateShapeText();
     for (let i in game.shop.isExpensiveCost) {
         if (typeof i === "undefined") continue;
-        document.getElementById(`shop-${i}-cost`).innerHTML = `Cost: ${game.shop.costs[i} shapes`;
+        document.getElementById(`shop-${i}-cost`).innerHTML = `Cost: ${game.shop.costs[i]} shapes`;
     }
     document.getElementById("prestige-button").innerHTML = `Prestige (requires ${game.prestige.prestigeMin} shapes)`
 }
