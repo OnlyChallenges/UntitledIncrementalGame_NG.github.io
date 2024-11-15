@@ -48,7 +48,7 @@ game.altar.altarDiv.style.display = 'none';
 game.mainDiv.style.display = 'block';
 
 function increaseShapes() {
-    let increment = Math.round(game.variables.shapesPerClick * game.variables.ticksPerClick * (1 + game.variables.efficiency) * (2 ^ (game.variables.booster-1)));
+    let increment = Math.round(game.variables.shapesPerClick * game.variables.ticksPerClick * (1 + game.variables.efficiency) * Math.pow(2, game.variables.booster));
     increment += Math.round(game.resources.gildedShapes * (game.prestige.gildedShapesBoostPercent / 100) * (game.variables.shapesPerClick / 2));
 
     if (game.stats.statsOpen) {
@@ -58,7 +58,7 @@ function increaseShapes() {
         Shapes per Click: ${game.variables.shapesPerClick}<br>
         Ticks per Click: ${game.variables.ticksPerClick}<br>
         Efficiency: ${game.variables.efficiency}<br>
-        Booster Multi: ${2^game.variables.booster}`
+        Booster Multi: ${Math.pow(2,game.variables.booster)}`
     }
 
     game.resources.shapes += increment
@@ -170,7 +170,7 @@ function toggleHelp() {
         Efficiency increases your shape gain by 1 for each point you have.<br>
         Ticks increase your shape gain by increasing the amount of times that your shapes are calculated per click.<br><br>
         
-        Once you reach 10,000 shapes, you may gain prestige and gain Gilded Shapes based on the amount of shapes you have. (Formula: log10(shapes) - 4)<br>
+        Once you reach 10,000 shapes, you may gain prestige and gain Gilded Shapes based on the amount of shapes you have. (Formula: log(shapes^1.1) - 4)<br>
         Each Gilded Shape gives you 50% of your shapes per click.<br><br>
         
         After reaching 10 Gilded Shapes, the Altar is unlocked. There, you may convert Gilded Shapes into Astral Shapes, and allocate them to Spells.<br>
