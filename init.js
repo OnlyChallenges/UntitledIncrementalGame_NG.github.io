@@ -115,7 +115,7 @@ function prestige() {
 
     let i = 0;
     for (let item of game.shop.costs) {
-        if (typeof document.getElementById(`shop-${i}-cost`) === "undefined") continue;
+        if (document.getElementById(`shop-${i}-cost`) === null) continue;
         document.getElementById(`shop-${i}-cost`).innerHTML = `Cost: ${item} shapes`;
         i++;
     }
