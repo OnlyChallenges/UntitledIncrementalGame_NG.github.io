@@ -6,6 +6,7 @@ let game = {
         totalGildedShapes: 0,
         statsOpen: false,
         helpOpen: false,
+        newgameOpen: false,
     },
     resources: {
         shapes: 0,
@@ -16,6 +17,7 @@ let game = {
         shapesPerClick: 1,
         ticksPerClick: 1,
         efficiency: 0,
+        booster: 1,
     },
     prestige: {
         prestigeMin: 10_000,
@@ -24,7 +26,7 @@ let game = {
         gildedShapesGainPercent: 100,
     },
     shop: {
-        costs: [10, 100, 1_500, 100_000, 25_000_000, 1_000_000_000],
+        costs: [10, 100, 1_500, 100_000, 25_000_000, 1_000_000_000, 7_500_000],
         isExpensiveCost: [false, true, false, undefined, undefined, undefined],
         costIncrease: 2,
         costIncreaseExpensive: 3,
@@ -46,7 +48,7 @@ game.altar.altarDiv.style.display = 'none';
 game.mainDiv.style.display = 'block';
 
 function increaseShapes() {
-    let increment = Math.round(game.variables.shapesPerClick * game.variables.ticksPerClick * (1 + game.variables.efficiency));
+    let increment = Math.round(game.variables.shapesPerClick * game.variables.ticksPerClick * (1 + game.variables.efficiency) * (2 ^ (game.variables.booster-1)));
     increment += Math.round(game.resources.gildedShapes * (game.prestige.gildedShapesBoostPercent / 100) * (game.variables.shapesPerClick / 2));
 
     if (game.stats.statsOpen) {
@@ -55,7 +57,8 @@ function increaseShapes() {
         Total Shapes: ${game.stats.totalShapes}<br>
         Shapes per Click: ${game.variables.shapesPerClick}<br>
         Ticks per Click: ${game.variables.ticksPerClick}<br>
-        Efficiency: ${game.variables.efficiency}`
+        Efficiency: ${game.variables.efficiency}<br>
+        Booster Multi: ${2^game.variables.booster}`
     }
 
     game.resources.shapes += increment
@@ -98,6 +101,9 @@ function buyShopItem(item) {
         case 2:
             game.variables.ticksPerClick += 2;
             break;
+        case 3:
+            game.variables.booster++;
+            break;
     }
     updateShapeText();
 }
@@ -109,7 +115,7 @@ function prestige() {
     }
     if (!(confirm("Are you sure you want to prestige?"))) return;
 
-    let increment = +((game.prestige.gildedShapesGainPercent / 100)*(Math.log10(game.resources.shapes) - 4).toFixed(2));
+    let increment = +((game.prestige.gildedShapesGainPercent / 100)*(Math.log10(game.resources.shapes.pow(1.1)) - 4).toFixed(2));
     game.resources.gildedShapes += increment;
     game.stats.totalGildedShapes += increment;
     game.resources.shapes = 0;
@@ -119,8 +125,22 @@ function prestige() {
     game.prestige.prestigeMin *= game.prestige.prestigeIncrement;
     game.shop.costs = [10, 100, 2_500, 100_000, 25_000_000, 1_000_000_000];
 
-    document.getElementById("prestige-button").innerHTML = `Prestige (requires ${game.prestige.prestigeMin} shapes)`;
+    document.getElementById("prestige-button").innerHTML = `Prestige (requires ${convertToAbbreviation(game.prestige.prestigeMin)} shapes)`;
     updateShapeText();
+}
+
+function toggleNew() {
+    if (game.stats.newgameOpen) {
+        document.getElementById("new-text").innerHTML = "";
+    } else {
+        document.getElementById("new-text").innerHTML = `
+        This is NG+;
+            Adding Booster which doubles shapes for each one you have
+            Improved prestige formula slightly
+            Changed Alter to 9 Guilded Shapes instead of 10
+        `
+    }
+    game.stats.newgameOpen = !game.stats.newgameOpen;
 }
 
 function toggleStats() {
@@ -132,7 +152,8 @@ function toggleStats() {
         Total Shapes: ${game.stats.totalShapes}<br>
         Shapes per Click: ${game.variables.shapesPerClick}<br>
         Ticks per Click: ${game.variables.ticksPerClick}<br>
-        Efficiency: ${game.variables.efficiency}`
+        Efficiency: ${game.variables.efficiency}<br>
+        Booster Multi: ${2^game.variables.booster}`
     }
     game.stats.statsOpen = !game.stats.statsOpen;
 }
