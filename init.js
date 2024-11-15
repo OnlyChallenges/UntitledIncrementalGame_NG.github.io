@@ -19,7 +19,9 @@ let game = {
     },
     prestige: {
         prestigeMin: 10_000,
-        prestigeIncrement: 100,
+        prestigeIncrement: 10,
+        gildedShapesBoostPercent: 100,
+        gildedShapesGainPercent: 100,
     },
     shop: {
         costs: [10, 100, 1_500, 100_000, 25_000_000, 1_000_000_000],
@@ -29,19 +31,23 @@ let game = {
     },
     altar: {
         altarOpen: false,
+        altarUnlocked: false,
         altarDiv: document.getElementById('altar'),
         astralShapesAvailable: 0,
-        astralShapesAllocated: [0],
-        spells: ["Golden Ritual"],
+        astralShapesAllocated: [0, 0],
+        totalAstralAllocated: 0,
+        spells: ["Golden Ritual", "Gifted Rebirth"],
     }
 }
 const gameReset = Object.assign({}, game);
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 game.altar.altarDiv.style.display = 'none';
 game.mainDiv.style.display = 'block';
 
 function increaseShapes() {
     let increment = Math.round(game.variables.shapesPerClick * game.variables.ticksPerClick * (1 + game.variables.efficiency));
-    increment += Math.round(game.resources.gildedShapes * game.variables.shapesPerClick / 2);
+    increment += Math.round(game.resources.gildedShapes * (game.prestige.gildedShapesBoostPercent / 100) * (game.variables.shapesPerClick / 2));
 
     if (game.stats.statsOpen) {
         document.getElementById("stats-text").innerHTML = `
@@ -64,7 +70,7 @@ function updateShapeText() {
 
     if (game.altar.altarOpen) {
         document.getElementById("astral-shapes-text").innerHTML = `Astral Shapes: ${game.resources.astralShapes}`;
-        document.getElementById("astral-available-shapes-text").innerHTML = `Astral Shapes Available: ${game.altar.astralShapesAvailable}`;
+        document.getElementById("astral-shapes-available-text").innerHTML = `Astral Shapes Available: ${game.altar.astralShapesAvailable}`;
     }
 }
 
@@ -103,22 +109,15 @@ function prestige() {
     }
     if (!(confirm("Are you sure you want to prestige?"))) return;
 
-    game.resources.gildedShapes += +((Math.log10(game.resources.shapes) - 3).toFixed(2));
-    game.stats.totalGildedShapes += +((Math.log10(game.resources.shapes) - 3).toFixed(2)); // Sorry.
-
+    let increment = +((game.prestige.gildedShapesGainPercent / 100)*(Math.log10(game.resources.shapes) - 4).toFixed(2));
+    game.resources.gildedShapes += increment;
+    game.stats.totalGildedShapes += increment;
     game.resources.shapes = 0;
     game.variables.efficiency = 0;
     game.variables.shapesPerClick = 1;
     game.variables.ticksPerClick = 1;
     game.prestige.prestigeMin *= game.prestige.prestigeIncrement;
     game.shop.costs = [10, 100, 2_500, 100_000, 25_000_000, 1_000_000_000];
-
-    let i = 0;
-    for (let item of game.shop.costs) {
-        if (document.getElementById(`shop-${i}-cost`) === null) continue;
-        document.getElementById(`shop-${i}-cost`).innerHTML = `Cost: ${item} shapes`;
-        i++;
-    }
 
     document.getElementById("prestige-button").innerHTML = `Prestige (requires ${game.prestige.prestigeMin} shapes)`;
     updateShapeText();
@@ -150,7 +149,7 @@ function toggleHelp() {
         Efficiency increases your shape gain by 1 for each point you have.<br>
         Ticks increase your shape gain by increasing the amount of times that your shapes are calculated per click.<br><br>
         
-        Once you reach 10,000 shapes, you may prestige and gain Gilded Shapes based on the amount of shapes you have. (Formula: log10(shapes) - 4)<br>
+        Once you reach 10,000 shapes, you may gain prestige and gain Gilded Shapes based on the amount of shapes you have. (Formula: log10(shapes) - 4)<br>
         Each Gilded Shape gives you 50% of your shapes per click.<br><br>
         
         After reaching 10 Gilded Shapes, the Altar is unlocked. There, you may convert Gilded Shapes into Astral Shapes, and allocate them to Spells.<br>
@@ -161,9 +160,10 @@ function toggleHelp() {
 }
 
 function toggleAltar() {
-    if (game.resources.gildedShapes < 10) {
+    if (game.resources.gildedShapes >= 10) game.altar.altarUnlocked = true;
+    if (!(game.altar.altarUnlocked)) {
         document.getElementById("altar-button").innerHTML = "Altar (requires 10 Gilded Shapes)";
-        alert("You need 10 Gilded Shapes to access the Altar");
+        alert("You need 10 Gilded Shapes to access the Altar!");
         return;
     }
 
@@ -208,21 +208,34 @@ function convertShapes(type) {
 
 function allocateAstralShapes(spell) {
     let spellName = game.altar.spells[spell];
-    let amount = prompt("How many Astral Shapes to allocate in the spell?")
-    if (!(typeof amount === "number")) return;
+    let amount = +prompt("How many Astral Shapes to allocate in the spell?")
+    if (!(typeof amount === "number") || amount === 0) return;
 
-    let totalAstralAllocated = 0;
+    game.altar.totalAstralAllocated = 0;
     for (let i of game.altar.astralShapesAllocated) {
-        totalAstralAllocated += i;
+        game.altar.totalAstralAllocated += i;
     }
-    game.altar.astralShapesAvailable = game.resources.astralShapes - totalAstralAllocated;
+    game.altar.astralShapesAvailable = game.resources.astralShapes - game.altar.totalAstralAllocated;
 
     if (amount > game.altar.astralShapesAvailable) {
         alert("Not enough Astral Shapes available!")
         return;
     }
+    game.altar.astralShapesAllocated[spell] += amount;
+    game.altar.astralShapesAvailable -= amount;
+
+    switch (spell) {
+        case 0:
+            game.prestige.gildedShapesBoostPercent = amount * 5 + 100;
+            break;
+        case 1:
+            game.prestige.gildedShapesGainPercent = amount * 3 + 100;
+            break;
+    }
+    alert(`Allocated ${amount} Astral Shapes to spell ${spellName}!`);
+    updateShapeText();
 }
-/*
+
 function hardReset() {
     if (!(confirm("Are you sure you want to hard reset?"))) return;
     if (!(confirm("This will erase EVERYTHING! Are you really sure?"))) return;
@@ -232,4 +245,3 @@ function hardReset() {
     updateShapeText();
     alert("Reset your game!");
 }
-*/
