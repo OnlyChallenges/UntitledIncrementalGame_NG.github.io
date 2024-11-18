@@ -54,10 +54,10 @@ function increaseShapes() {
 
     if (game.stats.statsOpen) {
         document.getElementById("stats-text").innerHTML = `
-        Total Clicks: ${game.stats.totalClicks}<br>
-        Total Shapes: ${game.stats.totalShapes}<br>
-        Shapes per Click: ${game.variables.shapesPerClick}<br>
-        Ticks per Click: ${game.variables.ticksPerClick}<br>
+        Total Clicks: ${convertToAbbreviation(game.stats.totalClicks)}<br>
+        Total Shapes: ${convertToAbbreviation(game.stats.totalShapes)}<br>
+        Shapes per Click: ${convertToAbbreviation(game.variables.shapesPerClick)}<br>
+        Ticks per Click: ${convertToAbbreviation(game.variables.ticksPerClick)}<br>
         Efficiency: ${game.variables.efficiency}<br>
         Booster Multi: ${Math.pow(2,game.variables.booster)}x`
     }
@@ -69,7 +69,7 @@ function increaseShapes() {
 }
 
 function updateShapeText() {
-    document.getElementById("shapes-text").innerHTML = `Shapes: ${game.resources.shapes}`;
+    document.getElementById("shapes-text").innerHTML = `Shapes: ${convertToAbbreviation(game.resources.shapes)}`;
     document.getElementById("gilded-shapes-text").innerHTML = `Gilded Shapes: ${game.resources.gildedShapes}`;
 
     if (game.altar.altarOpen) {
@@ -88,7 +88,7 @@ function buyShopItem(item) {
 
     game.resources.shapes -= game.shop.costs[item];
     if (!(game.shop.isExpensiveCost[item] ?? false) && item != 3) game.shop.costs[item] *= game.shop.costIncrease
-    else if (item == 3) game.shop.cost[item] *= game.shop.costIncreaseSuperExpensive
+    else if (item == 3) game.shop.costs[item] *= game.shop.costIncreaseSuperExpensive
     else game.shop.costs[item] *= game.shop.costIncreaseExpensive
 
     document.getElementById(`shop-${item}-cost`).innerHTML = `Cost: ${game.shop.costs[item]} shapes`;
@@ -150,10 +150,10 @@ function toggleStats() {
         document.getElementById("stats-text").innerHTML = "";
     } else {
         document.getElementById("stats-text").innerHTML = `
-        Total Clicks: ${game.stats.totalClicks}<br>
-        Total Shapes: ${game.stats.totalShapes}<br>
-        Shapes per Click: ${game.variables.shapesPerClick}<br>
-        Ticks per Click: ${game.variables.ticksPerClick}<br>
+        Total Clicks: ${convertToAbbreviation(game.stats.totalClicks)}<br>
+        Total Shapes: ${convertToAbbreviation(game.stats.totalShapes)}<br>
+        Shapes per Click: ${convertToAbbreviation(game.variables.shapesPerClick)}<br>
+        Ticks per Click: ${convertToAbbreviation(game.variables.ticksPerClick)}<br>
         Efficiency: ${game.variables.efficiency}<br>
         Booster Multi: ${Math.pow(2,game.variables.booster)}x`
     }

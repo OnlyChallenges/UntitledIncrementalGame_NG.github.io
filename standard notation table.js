@@ -30,6 +30,8 @@ let standardNotationTable = [ // idle research numbers, basically up to 1e100, 1
     {divider:"1e15",suffix:"Qa"},
     {divider:"1e12",suffix:"T"},
     {divider:"1e9",suffix:"B"},
+    {divider:"1e6",suffix:"M"},
+    {divider:"1e3",suffix:"K"},
 ]
 
 function convertToAbbreviation(number) {
