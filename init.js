@@ -17,7 +17,7 @@ let game = {
         shapesPerClick: 1,
         ticksPerClick: 1,
         efficiency: 0,
-        booster: 1,
+        booster: 0,
     },
     prestige: {
         prestigeMin: 10_000,
@@ -27,9 +27,10 @@ let game = {
     },
     shop: {
         costs: [10, 100, 1_500, 100_000, 25_000_000, 1_000_000_000, 7_500_000],
-        isExpensiveCost: [false, true, false, undefined, undefined, undefined],
+        isExpensiveCost: [false, true, false, true, undefined, undefined],
         costIncrease: 2,
         costIncreaseExpensive: 3,
+        costIncreaseSuperExpensive: 8,
     },
     altar: {
         altarOpen: false,
@@ -58,7 +59,7 @@ function increaseShapes() {
         Shapes per Click: ${game.variables.shapesPerClick}<br>
         Ticks per Click: ${game.variables.ticksPerClick}<br>
         Efficiency: ${game.variables.efficiency}<br>
-        Booster Multi: ${Math.pow(2,game.variables.booster)}`
+        Booster Multi: ${Math.pow(2,game.variables.booster)}x`
     }
 
     game.resources.shapes += increment
@@ -86,7 +87,8 @@ function buyShopItem(item) {
     if (game.resources.shapes < game.shop.costs[item]) return;
 
     game.resources.shapes -= game.shop.costs[item];
-    if (!(game.shop.isExpensiveCost[item] ?? false)) game.shop.costs[item] *= game.shop.costIncrease
+    if (!(game.shop.isExpensiveCost[item] ?? false) && item != 3) game.shop.costs[item] *= game.shop.costIncrease
+    else if (item == 3) game.shop.cost[item] *= game.shop.costIncreaseSuperExpensive
     else game.shop.costs[item] *= game.shop.costIncreaseExpensive
 
     document.getElementById(`shop-${item}-cost`).innerHTML = `Cost: ${game.shop.costs[item]} shapes`;
@@ -135,8 +137,8 @@ function toggleNew() {
     } else {
         document.getElementById("new-text").innerHTML = `
         This is NG+;
-            Adding Booster which doubles shapes for each one you have
-            Improved prestige formula slightly
+            Adding Booster which doubles shapes for each one you have<br>
+            Improved prestige formula slightly<br>
             Changed Alter to 9 Guilded Shapes instead of 10
         `
     }
@@ -153,7 +155,7 @@ function toggleStats() {
         Shapes per Click: ${game.variables.shapesPerClick}<br>
         Ticks per Click: ${game.variables.ticksPerClick}<br>
         Efficiency: ${game.variables.efficiency}<br>
-        Booster Multi: ${2^game.variables.booster}`
+        Booster Multi: ${Math.pow(2,game.variables.booster)}x`
     }
     game.stats.statsOpen = !game.stats.statsOpen;
 }
